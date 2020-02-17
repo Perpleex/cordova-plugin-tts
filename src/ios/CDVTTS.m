@@ -43,6 +43,7 @@
     NSString* locale = [options objectForKey:@"locale"];
     double rate = [[options objectForKey:@"rate"] doubleValue];
     NSString* category = [options objectForKey:@"category"];
+    SString* volume = [options objectForKey:@"volume"];
     
     [[AVAudioSession sharedInstance] setActive:NO withOptions:0 error:nil];
     if ([category isEqualToString:@"ambient"]) {
@@ -81,6 +82,7 @@
     utterance.voice = [AVSpeechSynthesisVoice voiceWithLanguage:locale];
     // Rate expression adjusted manually for a closer match to other platform.
     utterance.rate = (AVSpeechUtteranceMinimumSpeechRate * 1.5 + AVSpeechUtteranceDefaultSpeechRate) / 2.25 * rate * rate;
+    utterance.volume = volume;
     // workaround for https://github.com/vilic/cordova-plugin-tts/issues/21
     if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 9.0) {
        utterance.rate = utterance.rate * 2;
