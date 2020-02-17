@@ -11,6 +11,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.os.Build;
+import android.speech.tts.Voice;
 import android.speech.tts.TextToSpeech;
 import android.speech.tts.TextToSpeech.OnInitListener;
 import android.speech.tts.UtteranceProgressListener;
@@ -151,7 +152,7 @@ public class TTS extends CordovaPlugin implements OnInitListener {
     private void getVoices(JSONArray args, CallbackContext callbackContext)
     throws JSONException, NullPointerException {
       Set<Voice> allSupportedVoices = tts.getVoices();
-      JsonArrayBuilder voicesBuilder = Json.createArrayBuilder();
+      /*JsonArrayBuilder voicesBuilder = Json.createArrayBuilder();
       if(allSupportedVoices!= null) {
           for (Voice voice : allSupportedVoices) {
             voicesBuilder.add(Json.createObjectBuilder()
@@ -160,9 +161,9 @@ public class TTS extends CordovaPlugin implements OnInitListener {
                 .add("hashCode",voice.hashCode()));
           }
       }
-      JsonArray voices = voicesBuilder.build();
-
-      final PluginResult result = new PluginResult(PluginResult.Status.OK, voices);
+      JSONArray voices = voicesBuilder.build();
+      */
+      final PluginResult result = new PluginResult(PluginResult.Status.OK, new JSONArray(allSupportedVoices));
       callbackContext.sendPluginResult(result);
     }
 
