@@ -162,7 +162,7 @@ public class TTS extends CordovaPlugin implements OnInitListener {
             voicesArray.put(jsonObject);
           }
       }
-      final PluginResult result = new PluginResult(PluginResult.Status.OK, new JSONArray(voicesArray));
+      final PluginResult result = new PluginResult(PluginResult.Status.OK, voicesArray);
       callbackContext.sendPluginResult(result);
     }
 
