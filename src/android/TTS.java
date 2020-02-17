@@ -184,7 +184,7 @@ public class TTS extends CordovaPlugin implements OnInitListener {
         if (params.isNull("volume")) {
             volume = 1.0;
         } else {
-            volume = params.getDouble("rate");
+            volume = params.getDouble("volume");
         }
 
         if (tts == null) {
