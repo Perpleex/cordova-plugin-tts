@@ -83,7 +83,8 @@
     }
     
     AVSpeechUtterance* utterance = [[AVSpeechUtterance new] initWithString:text];
-    utterance.voice = [AVSpeechSynthesisVoice voiceWithLanguage:locale];
+    //utterance.voice = [AVSpeechSynthesisVoice voiceWithLanguage:locale];
+    utterance.voice = AVSpeechSynthesisVoice.init(language: locale);
     // Rate expression adjusted manually for a closer match to other platform.
     utterance.rate = (AVSpeechUtteranceMinimumSpeechRate * 1.5 + AVSpeechUtteranceDefaultSpeechRate) / 2.25 * rate * rate;
     utterance.volume = volume;
@@ -102,6 +103,21 @@
 }
 
 - (void)checkLanguage:(CDVInvokedUrlCommand *)command {
+    NSArray *voices = [AVSpeechSynthesisVoice speechVoices];
+    NSString *languages = @"";
+    for (id voiceName in voices) {
+        languages = [languages stringByAppendingString:@","];
+        languages = [languages stringByAppendingString:[voiceName valueForKey:@"language"]];
+    }
+    if ([languages hasPrefix:@","] && [languages length] > 1) {
+        languages = [languages substringFromIndex:1];
+    }
+
+    CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:languages];
+    [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+}
+
+- (void)getVoices:(CDVInvokedUrlCommand *)command {
     NSArray *voices = [AVSpeechSynthesisVoice speechVoices];
     NSString *languages = @"";
     for (id voiceName in voices) {
