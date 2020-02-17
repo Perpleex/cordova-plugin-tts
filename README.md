@@ -5,6 +5,8 @@
 iOS 7+  
 Windows Phone 8  
 Android 4.0.3+ (API Level 15+)
+Fix ios compile
+Add volume
 
 ## Installation
 
@@ -50,6 +52,8 @@ declare namespace TTS {
         locale?: string;
         /** speed rate, 0 ~ 1 */
         rate?: number;
+        /** volume, 0 ~ 1 */
+        volume?: number;
         /** ambient(iOS) */
         category?: string;
     }
