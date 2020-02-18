@@ -62,6 +62,7 @@
     
     [synthesizer stopSpeakingAtBoundary:AVSpeechBoundaryImmediate];
     
+    
     double pitch = [[options objectForKey:@"pitch"] doubleValue];
     
     if (!locale || (id)locale == [NSNull null]) {
@@ -82,6 +83,7 @@
     
     AVSpeechUtterance* utterance = [[AVSpeechUtterance new] initWithString:text];
     utterance.voice = [AVSpeechSynthesisVoice voiceWithLanguage:locale];
+
     // Rate expression adjusted manually for a closer match to other platform.
     utterance.rate = (AVSpeechUtteranceMinimumSpeechRate * 1.5 + AVSpeechUtteranceDefaultSpeechRate) / 2.25 * rate * rate;
     utterance.volume = volume;
@@ -115,17 +117,27 @@
 }
 
 - (void)getVoices:(CDVInvokedUrlCommand *)command {
+    NSString *locale = [command.arguments objectAtIndex:0];
     NSArray *voices = [AVSpeechSynthesisVoice speechVoices];
-    NSString *languages = @"";
-    for (id voiceName in voices) {
-        languages = [languages stringByAppendingString:@","];
-        languages = [languages stringByAppendingString:[voiceName valueForKey:@"language"]];
-    }
-    if ([languages hasPrefix:@","] && [languages length] > 1) {
-        languages = [languages substringFromIndex:1];
-    }
 
-    CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:languages];
+    NSMutableArray *arr = [[NSMutableArray alloc]init];
+    NSMutableDictionary *dict = [[NSMutableDictionary alloc]init];
+    
+    if (!locale || (id)locale == [NSNull null]) {
+        locale = @"en-US";
+    }
+    
+    for (id voiceName in voices) {
+        if ([[voiceName valueForKey:@"language"] isEqualToString: locale]){
+            [dict setObject:[voiceName valueForKey:@"name"] forKey:@"name"];
+            [dict setObject:[voiceName valueForKey:@"identifier"] forKey:@"identifier"];
+            [dict setObject:[voiceName valueForKey:@"language"] forKey:@"locale"];
+            [arr addObject:dict];
+            [dict removeAllObjects];
+        }
+    }
+    
+    CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsMultipart:arr];
     [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
 }
 @end
