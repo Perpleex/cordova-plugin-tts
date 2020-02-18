@@ -43,6 +43,7 @@
     NSString* locale = [options objectForKey:@"locale"];
     double rate = [[options objectForKey:@"rate"] doubleValue];
     NSString* category = [options objectForKey:@"category"];
+    NSString* identifier = [options objectForKey:@"identifier"];
     double volume = [[options objectForKey:@"volume"] doubleValue];
     
     [[AVAudioSession sharedInstance] setActive:NO withOptions:0 error:nil];
@@ -82,7 +83,12 @@
     }
     
     AVSpeechUtterance* utterance = [[AVSpeechUtterance new] initWithString:text];
-    utterance.voice = [AVSpeechSynthesisVoice voiceWithLanguage:locale];
+    if (!identifier || (id)identifier == [NSNull null]) {
+        utterance.voice = [AVSpeechSynthesisVoice voiceWithLanguage:locale];
+    }else{
+        utterance.voice = [AVSpeechSynthesisVoice voiceWithIdentifier:identifier];
+    }
+    
 
     // Rate expression adjusted manually for a closer match to other platform.
     utterance.rate = (AVSpeechUtteranceMinimumSpeechRate * 1.5 + AVSpeechUtteranceDefaultSpeechRate) / 2.25 * rate * rate;
@@ -120,17 +126,24 @@
     NSString *locale = [command.arguments objectAtIndex:0];
     NSArray *voices = [AVSpeechSynthesisVoice speechVoices];
 
-    NSMutableArray *arr = [[NSMutableArray alloc]init];    
+    NSMutableArray *arr = [[NSMutableArray alloc]init];
+    
     if (!locale || (id)locale == [NSNull null]) {
         locale = @"en-US";
     }
     
     for (id voiceName in voices) {
+        NSLog(@"Language Code: %@", [voiceName valueForKey:@"language"]);
+        NSLog(@"Name: %@", [voiceName valueForKey:@"name"]);
+        NSLog(@"Quality: %@", [voiceName valueForKey:@"quality"]);
+        NSLog(@"Identifier: %@", [voiceName valueForKey:@"identifier"]);
+        NSLog(@"-----------------------");
         if ([[voiceName valueForKey:@"language"] isEqualToString: locale]){
             NSMutableDictionary *dict = [[NSMutableDictionary alloc]init];
             [dict setObject:[voiceName valueForKey:@"name"] forKey:@"name"];
             [dict setObject:[voiceName valueForKey:@"identifier"] forKey:@"identifier"];
             [dict setObject:[voiceName valueForKey:@"language"] forKey:@"locale"];
+            [dict setObject:[voiceName valueForKey:@"quality"] forKey:@"quality"];
             [arr addObject:dict];
         }
     }
