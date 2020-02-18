@@ -62,8 +62,6 @@
     
     [synthesizer stopSpeakingAtBoundary:AVSpeechBoundaryImmediate];
     
-    NSDictionary* options = [command.arguments objectAtIndex:0];
-    
     double pitch = [[options objectForKey:@"pitch"] doubleValue];
     
     if (!locale || (id)locale == [NSNull null]) {
