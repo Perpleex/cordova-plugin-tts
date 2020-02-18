@@ -232,9 +232,9 @@ public class TTS extends CordovaPlugin implements OnInitListener {
 
         if(!params.isNull("identifier")){
             Set<Voice> allSupportedVoices = tts.getVoices();
-            Voice selectedVoice;
+            Voice selectedVoice = null;
             for (Voice voice : allSupportedVoices) {
-                if (voice.hashCode() == params.getString("identifier")){
+                if (voice.hashCode() == params.getInt("identifier")){
                     selectedVoice=voice;
                 }
             }
