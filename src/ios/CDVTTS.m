@@ -120,24 +120,22 @@
     NSString *locale = [command.arguments objectAtIndex:0];
     NSArray *voices = [AVSpeechSynthesisVoice speechVoices];
 
-    NSMutableArray *arr = [[NSMutableArray alloc]init];
-    NSMutableDictionary *dict = [[NSMutableDictionary alloc]init];
-    
+    NSMutableArray *arr = [[NSMutableArray alloc]init];    
     if (!locale || (id)locale == [NSNull null]) {
         locale = @"en-US";
     }
     
     for (id voiceName in voices) {
         if ([[voiceName valueForKey:@"language"] isEqualToString: locale]){
+            NSMutableDictionary *dict = [[NSMutableDictionary alloc]init];
             [dict setObject:[voiceName valueForKey:@"name"] forKey:@"name"];
             [dict setObject:[voiceName valueForKey:@"identifier"] forKey:@"identifier"];
             [dict setObject:[voiceName valueForKey:@"language"] forKey:@"locale"];
             [arr addObject:dict];
-            [dict removeAllObjects];
         }
     }
     
-    CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsMultipart:arr];
+    CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsArray:arr];
     [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
 }
 @end
