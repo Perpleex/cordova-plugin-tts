@@ -83,8 +83,7 @@
     }
     
     AVSpeechUtterance* utterance = [[AVSpeechUtterance new] initWithString:text];
-    //utterance.voice = [AVSpeechSynthesisVoice voiceWithLanguage:locale];
-    utterance.voice = AVSpeechSynthesisVoice.init(language: "fr-FR");
+    utterance.voice = [AVSpeechSynthesisVoice voiceWithLanguage:locale];
     // Rate expression adjusted manually for a closer match to other platform.
     utterance.rate = (AVSpeechUtteranceMinimumSpeechRate * 1.5 + AVSpeechUtteranceDefaultSpeechRate) / 2.25 * rate * rate;
     utterance.volume = volume;
