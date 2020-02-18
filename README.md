@@ -66,6 +66,6 @@ declare namespace TTS {
     function checkLanguage(): Promise<string>;
     function openInstallTts(): Promise<void>;
     function openInstallTts(): Promise<void>;
-    TTS.getVoices('fr-FR') Promise<json>
+    function getVoices('fr-FR') Promise<json>
 }
 ```
