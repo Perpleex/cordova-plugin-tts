@@ -5,9 +5,10 @@
 iOS 7+  
 Windows Phone 8  
 Android 4.0.3+ (API Level 15+)
+
 Fix ios compile
 Add volume
-
+Add voice selection for android and ios
 ## Installation
 
 ```sh
@@ -50,6 +51,7 @@ declare namespace TTS {
         text: string;
         /** a string like 'en-US', 'zh-CN', etc */
         locale?: string;
+        identifier?: string; (Voice identifier return by getVoices)
         /** speed rate, 0 ~ 1 */
         rate?: number;
         /** volume, 0 ~ 1 */
@@ -63,5 +65,7 @@ declare namespace TTS {
     function stop(): Promise<void>;
     function checkLanguage(): Promise<string>;
     function openInstallTts(): Promise<void>;
+    function openInstallTts(): Promise<void>;
+    TTS.getVoices('fr-FR') Promise<json>
 }
 ```
