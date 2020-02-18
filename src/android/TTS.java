@@ -153,7 +153,7 @@ public class TTS extends CordovaPlugin implements OnInitListener {
 
     private void getVoices(JSONArray args, CallbackContext callbackContext)
     throws JSONException, NullPointerException {
-        final String locale = args.getString(0);
+        String locale = args.getString(0);
         if (null == locale){
             locale="en-US";
         }
@@ -234,7 +234,7 @@ public class TTS extends CordovaPlugin implements OnInitListener {
             Set<Voice> allSupportedVoices = tts.getVoices();
             Voice selectedVoice;
             for (Voice voice : allSupportedVoices) {
-                if (voice.hashCode == params.getString("identifier")){
+                if (voice.hashCode() == params.getString("identifier")){
                     selectedVoice=voice;
                 }
             }
