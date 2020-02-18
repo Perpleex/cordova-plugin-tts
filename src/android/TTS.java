@@ -153,17 +153,24 @@ public class TTS extends CordovaPlugin implements OnInitListener {
 
     private void getVoices(JSONArray args, CallbackContext callbackContext)
     throws JSONException, NullPointerException {
-      Set<Voice> allSupportedVoices = tts.getVoices();
-      JSONArray voicesArray = new JSONArray();
-      if(allSupportedVoices!= null) {
-          for (Voice voice : allSupportedVoices) {
-            JSONObject jsonObject= new JSONObject();
-            jsonObject.put("name",voice.getName());
-            jsonObject.put("locale",voice.getLocale().getCountry());
-            jsonObject.put("hashCode",voice.hashCode());
-            voicesArray.put(jsonObject);
-          }
-      }
+        final String locale = args.getString(0);
+        if (null == locale){
+            locale="en-US";
+        }
+        Set<Voice> allSupportedVoices = tts.getVoices();
+        JSONArray voicesArray = new JSONArray();
+        if(allSupportedVoices!= null) {
+            for (Voice voice : allSupportedVoices) {
+                if(voice.getLocale().getCountry() == locale){
+                    JSONObject jsonObject= new JSONObject();
+                    jsonObject.put("name",voice.getName());
+                    jsonObject.put("locale",voice.getLocale().getCountry());
+                    jsonObject.put("identifier",voice.hashCode());
+                    jsonObject.put("quality",voice.getQuality());
+                    voicesArray.put(jsonObject);
+                }
+            }
+        }
       final PluginResult result = new PluginResult(PluginResult.Status.OK, voicesArray);
       callbackContext.sendPluginResult(result);
     }
@@ -222,6 +229,20 @@ public class TTS extends CordovaPlugin implements OnInitListener {
         ttsParams.put(TextToSpeech.Engine.KEY_PARAM_VOLUME, Double.toString(volume));
         String[] localeArgs = locale.split("-");
         tts.setLanguage(new Locale(localeArgs[0], localeArgs[1]));
+
+        if(!params.isNull("identifier")){
+            Set<Voice> allSupportedVoices = tts.getVoices();
+            Voice selectedVoice;
+            for (Voice voice : allSupportedVoices) {
+                if (voice.hashCode == params.getString("identifier")){
+                    selectedVoice=voice;
+                }
+            }
+            
+            if(!(null == selectedVoice)){
+                tts.setVoice(selectedVoice);
+            }
+        }
 
         if (Build.VERSION.SDK_INT >= 26) {
             tts.setSpeechRate((float) rate * 0.7f);
