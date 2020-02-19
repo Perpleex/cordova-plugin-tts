@@ -163,7 +163,17 @@ public class TTS extends CordovaPlugin implements OnInitListener {
         JSONArray voicesArray = new JSONArray();
         if(allSupportedVoices!= null) {
             for (Voice voice : allSupportedVoices) {
-                if(voice.getLocale().toString().equalsIgnoreCase(localeFormated)){
+                if(voice.getLocale().toString().equalsIgnoreCase(localeFormated) || voice.getName().contains(locale)){
+                    JSONObject jsonObject= new JSONObject();
+                    jsonObject.put("name",voice.getName());
+                    jsonObject.put("locale",voice.getLocale().getCountry());
+                    jsonObject.put("identifier",voice.hashCode());
+                    jsonObject.put("quality",voice.getQuality()/100);
+                    voicesArray.put(jsonObject);
+                }
+            }
+            if(voicesArray.length()==0){
+                for (Voice voice : allSupportedVoices) {
                     JSONObject jsonObject= new JSONObject();
                     jsonObject.put("name",voice.getName());
                     jsonObject.put("locale",voice.getLocale().getCountry());
