@@ -20,30 +20,30 @@ exports.speak = function (text) {
             options = text;
         }
 
-        cordova.exec(resolve, reject, 'TTS', 'speak', [options]);
+        cordova.exec(resolve, reject(err), 'TTS', 'speak', [options]);
     });
 };
 
 exports.stop = function() {
     return new Promise(function (resolve, reject) {
-        cordova.exec(resolve, reject, 'TTS', 'stop', []);
+        cordova.exec(resolve, reject(err), 'TTS', 'stop', []);
     });
 };
 
 exports.checkLanguage = function() {
     return new Promise(function (resolve, reject) {
-        cordova.exec(resolve, reject, 'TTS', 'checkLanguage', []);
+        cordova.exec(resolve, reject(err), 'TTS', 'checkLanguage', []);
     });
 };
 
 exports.getVoices = function(text) {
     return new Promise(function (resolve, reject) {
-        cordova.exec(resolve, reject, 'TTS', 'getVoices', [text]);
+        cordova.exec(resolve, reject(err), 'TTS', 'getVoices', [text]);
     });
 };
 
 exports.openInstallTts = function() {
     return new Promise(function (resolve, reject) {
-        cordova.exec(resolve, reject, 'TTS', 'openInstallTts', []);
+        cordova.exec(resolve, reject(err), 'TTS', 'openInstallTts', []);
     });
 };
