@@ -56,7 +56,7 @@
     }
 
     if (callbackId) {
-        lastCallbackId = callbackId;
+        //lastCallbackId = callbackId;
     }
     
     callbackId = command.callbackId;
